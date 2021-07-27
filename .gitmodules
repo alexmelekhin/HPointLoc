@@ -1,0 +1,3 @@
+[submodule "hierarchical_localization"]
+	path = hierarchical_localization
+	url = https://github.com/cds-mipt/hierarchical_localization
