@@ -4,3 +4,7 @@
 [submodule "netvlad_pytorch"]
 	path = netvlad_pytorch
 	url = https://github.com/cds-mipt/netvlad_pytorch.git
+[submodule "cdxslam"]
+	path = cdxslam
+	url = https://github.com/cds-mipt/cdxslam
+	branch = hf_net_habitat
