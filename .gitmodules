@@ -1,3 +1,6 @@
 [submodule "hierarchical_localization"]
 	path = hierarchical_localization
 	url = https://github.com/cds-mipt/hierarchical_localization
+[submodule "netvlad_pytorch"]
+	path = netvlad_pytorch
+	url = https://github.com/cds-mipt/netvlad_pytorch.git
