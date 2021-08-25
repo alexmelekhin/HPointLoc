@@ -22,11 +22,7 @@ Quality of various visual localization methods on the HPointLoc-Val dataset
   <img src="https://user-images.githubusercontent.com/68793107/130797845-db40b499-e319-4bb3-98c3-7c557d523c93.png" />
 </p>
 
-Typical problems that sometimes arise in all image retrieval methods (for example, the NetVLAD method): a - the selection of an image that looks like a query occurs with an error caused by the lack of explicit usage of semantics (information about the presence of objects, about their color, etc.), b - the selected top-1 image contains the same scene as the query image, but is more than 1 meter away from it and generates a localization error.
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130798070-03c1c95c-be97-4836-8891-f07df67fe2b1.png" />
-</p>
+The image retrieval results on NetVLAD method example.
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
