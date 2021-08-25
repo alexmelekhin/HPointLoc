@@ -11,18 +11,17 @@ HPointLoc is based on the popular Habitat simulator from 49 photorealistic indoo
   <img src="https://user-images.githubusercontent.com/68793107/130797278-615f72c7-0528-4eff-af95-a7e07bf1fea3.png" />
 </p> 
 
-
 When forming the dataset, considerable attention was paid to the presence of instance segmentation of scene objects, which will allow it to be used in new emerging semantic methods for place recognition and localization
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130794869-ea0388e6-f19c-4c83-989a-64d79622db2a.png" />
 </p>
 
-Quality of various visual localization methods on the HPointLoc-Val dataset
+Quality of various visual localization methods on the **HPointLoc-Val** dataset
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130797845-db40b499-e319-4bb3-98c3-7c557d523c93.png" />
 </p>
 
-The image retrieval results on NetVLAD method example
+The image retrieval on **HPointLoc-Val** dataset 
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
