@@ -22,7 +22,7 @@ Quality of various visual localization methods on the HPointLoc-Val dataset
   <img src="https://user-images.githubusercontent.com/68793107/130797845-db40b499-e319-4bb3-98c3-7c557d523c93.png" />
 </p>
 
-The image retrieval results on NetVLAD method example.
+The image retrieval results on NetVLAD method example
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
