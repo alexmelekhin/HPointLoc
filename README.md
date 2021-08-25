@@ -16,11 +16,9 @@ When forming the dataset, considerable attention was paid to the presence of ins
   <img src="https://user-images.githubusercontent.com/68793107/130794869-ea0388e6-f19c-4c83-989a-64d79622db2a.png" />
 </p>
 
-Quality of various visual localization methods on the **HPointLoc-Val** dataset
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130797845-db40b499-e319-4bb3-98c3-7c557d523c93.png" />
-</p>
 
+
+The experiments were held on the **HPointLoc** dataset.
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130799354-25caaa4e-2156-432e-80df-b6a2becbe8ba.png" />
 </p>
@@ -31,6 +29,9 @@ The image retrieval on **HPointLoc-Val** dataset
   <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
 </p>
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130799671-c938881b-faf6-435a-8aea-c3ae006e76a0.png" />
+</p>
 
 ## Quick start to evaluate PNTR pipeline
 
