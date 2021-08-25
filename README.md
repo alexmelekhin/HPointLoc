@@ -7,5 +7,5 @@ git clone --recurse-submodules https://github.com/cds-mipt/HPointLoc
 
 
 ```bash
-python pipelines/pipeline_evaluate.py --dataset_root /path/to/dataset --image-retrieval 'patchnetvlad' --keypoints-matching 'superpoint_superglue' --optimizer-cloud 'g2o' -f  
+python pipelines/pipeline_evaluate.py --dataset_root /path/to/dataset --image-retrieval 'patchnetvlad' --keypoints-matching 'superpoint_superglue' --optimizer-cloud 'teaser' -f  
 ```
