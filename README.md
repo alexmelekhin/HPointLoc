@@ -6,7 +6,7 @@ This repository provides a novel framework **PNTR** for exploring new indoor dat
 Our paper on deep learning-based visual place recognition contains detailed information about these datasets:
 > BibteX: HPointLoc: open dataset and framework for indoor visual localizationbased on synthetic RGB-D images*
 
-HPointLoc is based on the popular Habitat simulator from 49 photorealistic indoor scenes from the Matterport3D dataset and contains 76,000 frames.
+**HPointLoc** is based on the popular Habitat simulator from 49 photorealistic indoor scenes from the Matterport3D dataset and contains 76,000 frames.
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130797278-615f72c7-0528-4eff-af95-a7e07bf1fea3.png" />
 </p> 
