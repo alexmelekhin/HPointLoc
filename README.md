@@ -9,6 +9,10 @@ Our paper on deep learning-based visual place recognition contains detailed info
   <img src="https://user-images.githubusercontent.com/68793107/130793350-4ccb203d-ebbf-4c0d-aa65-ad3f49d0a874.png" />
 </p>
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130794344-508fb27d-1dcc-4d51-91b6-f8e4db7f5ff9.png" />
+</p>
+
 ## Quick start to evaluate PNTR pipeline
 
 ```bash
