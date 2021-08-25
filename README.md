@@ -16,8 +16,15 @@ When forming the dataset, considerable attention was paid to the presence of ins
   <img src="https://user-images.githubusercontent.com/68793107/130794869-ea0388e6-f19c-4c83-989a-64d79622db2a.png" />
 </p>
 
+The dataset is split into two parts: the validation HPointLoc-Val, which contains only one scene, and the complete HPointLoc-All dataset, containing all 49 scenes, including HPointLoc-Val
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130804077-ac2665fe-0f1f-4229-9486-af7c0e0a762e.png" />
+</p>
 
-
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130804200-8676ed73-169f-46d2-8dac-877596d14f40.png" />
+</p>
+## EXPERIMENTAL RESULTS
 The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** datasets.
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130799354-25caaa4e-2156-432e-80df-b6a2becbe8ba.png" />
