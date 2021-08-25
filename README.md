@@ -8,7 +8,7 @@ Our paper on deep learning-based visual place recognition contains detailed info
 
 HPointLoc is based on the popular Habitat simulator from 49 photorealistic indoor scenes from the Matterport3D dataset and contains 76,000 frames.
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130795690-6417cd00-5c27-4e62-a524-503eab6fdba9.png" />
+  <img src="https://user-images.githubusercontent.com/68793107/130796811-72841bde-c95e-4b76-9d79-0029e81feab1.png" />
 </p> 
 
 When forming the dataset, considerable attention was paid to the presence of instance segmentation of scene objects, which will allow it to be used in new emerging semantic methods for place recognition and localization
