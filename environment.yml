@@ -1,14 +1,13 @@
 name: habitat_pipeline
 
 channels:
-- pytorch
+- defaults 
 - conda-forge
-- defaults
+
 dependencies:
 - python=3.7
 - pip
-- cudatoolkit=11.1 -c pytorch -c nvidia
+- cudatoolkit=11.1
+- pytorch
 - pip:
    - -r file:requirements.txt
-
-
