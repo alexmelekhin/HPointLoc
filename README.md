@@ -29,7 +29,7 @@ The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** dataset
 </p>
 
 
-The image retrieval on **HPointLoc-Val** dataset 
+The image retrieval problem on **HPointLoc-Val** dataset 
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
