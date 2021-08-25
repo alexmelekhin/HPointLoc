@@ -1,11 +1,12 @@
 # HPointLoc
 Framework for visual place recognition and localization. This project is a complete implementation of paper "HPointLoc: open dataset and framework for indoor visual localizationbased on synthetic RGB-D images"
 
-This repository provides a novel framework **PNTR** for work with novel indoor dataset - **HPointLoc**, specially designed for exploring capabilities for detection and loop closure in Simultaneous Localization and Mapping (SLAM).
+This repository provides a novel framework **PNTR** for exploring new indoor datasets - **HPointLoc**, specially designed to explore detection and loop closure capabilities in Simultaneous Localization and Mapping (SLAM).
 
 Our paper on deep learning-based visual place recognition contains detailed information about these datasets:
-> BibteX:
-> HPointLoc: open dataset and framework for indoor visual localizationbased on synthetic RGB-D images*
+> BibteX: HPointLoc: open dataset and framework for indoor visual localizationbased on synthetic RGB-D images*
+ 
+![image](https://user-images.githubusercontent.com/68793107/130793210-a8b6391e-3317-44de-91b8-47d6fb660382.png)
 
 ## Quick start to evaluate PNTR pipeline
 
