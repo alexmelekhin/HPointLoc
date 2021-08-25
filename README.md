@@ -17,12 +17,10 @@ When forming the dataset, considerable attention was paid to the presence of ins
   <img src="https://user-images.githubusercontent.com/68793107/130794869-ea0388e6-f19c-4c83-989a-64d79622db2a.png" />
 </p>
 
+Quality of various visual localization methods on the HPointLoc-Val dataset
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130797488-9d1bfe09-180e-48c1-9900-f7342e0a771d.png" />
+  <img src="https://user-images.githubusercontent.com/68793107/130797845-db40b499-e319-4bb3-98c3-7c557d523c93.png" />
 </p>
-
-
-
 
 
 ## Quick start to evaluate PNTR pipeline
