@@ -16,6 +16,11 @@ When forming the dataset, considerable attention was paid to the presence of ins
   <img src="https://user-images.githubusercontent.com/68793107/130794869-ea0388e6-f19c-4c83-989a-64d79622db2a.png" />
 </p>
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130796173-c3469059-ad58-432e-ade9-8650d5e28ca6.png" />
+</p>
+
+
 ## Quick start to evaluate PNTR pipeline
 
 ```bash
