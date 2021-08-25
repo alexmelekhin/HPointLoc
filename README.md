@@ -28,6 +28,10 @@ Typical problems that sometimes arise in all image retrieval methods (for exampl
   <img src="https://user-images.githubusercontent.com/68793107/130798070-03c1c95c-be97-4836-8891-f07df67fe2b1.png" />
 </p>
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
+</p>
+
 
 ## Quick start to evaluate PNTR pipeline
 
