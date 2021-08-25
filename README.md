@@ -28,11 +28,11 @@ The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** dataset
 </p>
 
 
-The image retrieval problem on **HPointLoc-Val** dataset (NetVLAD case)
+<!-- The image retrieval problem on **HPointLoc-Val** dataset (NetVLAD case)
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
-</p>
+</p> -->
 
 ## Quick start to evaluate PNTR pipeline
 
