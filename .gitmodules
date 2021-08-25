@@ -11,6 +11,3 @@
 [submodule "3rd/kapture"]
 	path = 3rd/kapture
 	url = https://github.com/cds-mipt/HPointLoc.git
-[submodule "HPointLoc"]
-	path = HPointLoc
-	url = https://github.com/cds-mipt/HPointLoc.git
