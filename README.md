@@ -47,6 +47,9 @@ The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** dataset
 ```bash
 git clone --recurse-submodules https://github.com/cds-mipt/HPointLoc
 conda env create -f environment.yml
+cd ..
+bash download_HPointloc.sh
+cd /HPointLoc
 python pipelines/pipeline_evaluate.py --dataset_root /path/to/dataset --image-retrieval 'patchnetvlad' --keypoints-matching 'superpoint_superglue' --optimizer-cloud 'teaser' -f  
 ```
 
