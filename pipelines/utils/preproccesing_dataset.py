@@ -29,4 +29,8 @@ def preprocces_metadata(root_path):
                     qfile.write(os.path.join(filename) +'\n')
 
     print(f'Was loaded {qcount} query and {dbcount} database images')
+
+
+    #depth
+    depth_exts = ['*.npy']
     return query_image_path, db_image_path

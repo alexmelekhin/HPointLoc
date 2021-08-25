@@ -5,7 +5,8 @@ from os import makedirs
 from utils.subprocces import run_python_command
 from utils.preproccesing_dataset import preprocces_metadata
 import configparser
-from optimizers.teaser import teaser
+import subprocess
+import shutil
 
 def image_retrieval_stage(method, dataset_root, query_path, db_path, image_retrieval_path, topk=1):
     exct_stage = {'apgem': 'PATH.py', 'patchnetvlad':'3rd/Patch-NetVLAD/feature_extract.py', 'netvlad':'PATH.py', 'hfnet':'PATH.py'}
@@ -64,8 +65,13 @@ def keypoints_matching_stage(method, dataset_root, input_pairs, output_dir,):
                                     '--output_dir', output_dir]
         run_python_command(command, compute_image_pairs_args, None)
 
-def pose_optimization(method):
-    pass
+def pose_optimization(dataset_root, image_retrieval, kpt_matching, pose_optimization, force):
+    if pose_optimization == 'teaser':
+        if not exists('./3rd/TEASER-plusplus/') or force:
+            shutil.rmtree('./3rd/TEASER-plusplus/', ignore_errors=True)
+            completed = subprocess.run(['bash', './3rd/teaser.sh'])
+            from optimizers.teaser import teaser
+            teaser(dataset_root, image_retrieval, kpt_matching)
 
 
 def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_cloud, topk, result_path, dataset, force):
@@ -108,10 +114,7 @@ def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_c
 
 
     ######optimization
-    root_dir = os.getcwd()
-    os.chdir('3rd/TEASER-plusplus/build/python')
-    teaser(dataset_root, 'patchnetvlad', 'superpoint_superglue', pairsfile_path_full)
-    os.chdir(root_dir)
+    pose_optimization(dataset_root, image_retrieval, keypoints_matching, optimizer_cloud, force)
 
 
 def pipeline_command_line():
