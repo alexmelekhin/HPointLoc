@@ -21,9 +21,8 @@ The dataset is split into two parts: the validation HPointLoc-Val, which contain
   <img src="https://user-images.githubusercontent.com/68793107/130804077-ac2665fe-0f1f-4229-9486-af7c0e0a762e.png" />
 </p>
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130804200-8676ed73-169f-46d2-8dac-877596d14f40.png" />
-</p>
+![image](https://user-images.githubusercontent.com/68793107/130804828-952b2168-8e1f-462d-8014-9605530d5e20.png)
+
 ## Experimental results
 
 The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** datasets.
