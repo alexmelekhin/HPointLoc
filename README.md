@@ -12,6 +12,11 @@ Our paper on deep learning-based visual place recognition contains detailed info
   <img src="https://user-images.githubusercontent.com/68793107/130794517-258a4c06-13c5-4468-b380-eb908fbd7240.png" />
 </p>
 
+When forming the dataset, considerable attention was paid to the presence of instance segmentation of scene objects, which will allow it to be used in new emerging semantic methods for place recognition and localization
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130794869-ea0388e6-f19c-4c83-989a-64d79622db2a.png" />
+</p>
+
 ## Quick start to evaluate PNTR pipeline
 
 ```bash
