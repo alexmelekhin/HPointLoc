@@ -50,6 +50,7 @@ conda env create -f environment.yml
 conda activate habitat_pipeline 
 cd /path/to/dataset
 bash download_HPointloc.sh
+python exctracting_dataset.py --dataset_path /path/to/dataset
 cd /HPointLoc
 python pipelines/pipeline_evaluate.py --dataset_root /path/to/dataset --image-retrieval patchnetvlad --keypoints-matching superpoint_superglue --optimizer-cloud teaser -f --topk 1  
 ```
