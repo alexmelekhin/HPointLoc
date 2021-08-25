@@ -20,8 +20,9 @@ The dataset is split into two parts: the validation HPointLoc-Val, which contain
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130804077-ac2665fe-0f1f-4229-9486-af7c0e0a762e.png" />
 </p>
-
-![image](https://user-images.githubusercontent.com/68793107/130804828-952b2168-8e1f-462d-8014-9605530d5e20.png)
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130805029-d76ce041-10a4-47c4-91dd-52a50908ff39.png" />
+</p>
 
 ## Experimental results
 
