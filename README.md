@@ -18,19 +18,20 @@ When forming the dataset, considerable attention was paid to the presence of ins
 
 
 
-The experiments were held on the **HPointLoc** dataset.
+The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** datasets.
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130799354-25caaa4e-2156-432e-80df-b6a2becbe8ba.png" />
 </p>
+
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130799671-c938881b-faf6-435a-8aea-c3ae006e76a0.png" />
+</p>
+
 
 The image retrieval on **HPointLoc-Val** dataset 
 
 <p align="center">
   <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
-</p>
-
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130799671-c938881b-faf6-435a-8aea-c3ae006e76a0.png" />
 </p>
 
 ## Quick start to evaluate PNTR pipeline
