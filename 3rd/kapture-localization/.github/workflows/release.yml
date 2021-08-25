@@ -1,0 +1,55 @@
+# This workflows will upload a Python Package using Twine when a release is created
+# For more information see: https://help.github.com/en/actions/language-and-framework-guides/using-python-with-github-actions#publishing-to-package-registries
+
+name: kapture-localization-release
+
+on:
+  release:
+    types: [created]
+
+jobs:
+  deploy_pip:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.6'
+
+    - name: Install pip build tools
+      run: |
+        sudo apt-get install -y pandoc asciidoctor
+        python -m pip install --upgrade pip
+        pip install "setuptools>=53.0" wheel twine
+        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
+
+    - name: pypi Build and publish
+      env:
+        TWINE_USERNAME: ${{ secrets.PYPI_USERNAME }}
+        TWINE_PASSWORD: ${{ secrets.PYPI_PASSWORD }}
+      run: |
+        python setup.py sdist bdist_wheel
+        twine upload --verbose --skip-existing dist/*
+
+  deploy_docker:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: docker build and push
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: kapture/kapture-localization
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        tag_names: true
+
+    - name: docker tag latest
+      uses: elgohr/Publish-Docker-Github-Action@master
+      with:
+        name: kapture/kapture-localization
+        username: ${{ secrets.DOCKERHUB_USERNAME }}
+        password: ${{ secrets.DOCKERHUB_TOKEN }}
+        tags: "latest"
