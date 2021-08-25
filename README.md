@@ -21,6 +21,10 @@ Quality of various visual localization methods on the **HPointLoc-Val** dataset
   <img src="https://user-images.githubusercontent.com/68793107/130797845-db40b499-e319-4bb3-98c3-7c557d523c93.png" />
 </p>
 
+<p align="center">
+  <img src="https://user-images.githubusercontent.com/68793107/130799354-25caaa4e-2156-432e-80df-b6a2becbe8ba.png" />
+</p>
+
 The image retrieval on **HPointLoc-Val** dataset 
 
 <p align="center">
