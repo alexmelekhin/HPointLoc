@@ -1,11 +1,13 @@
 import json
 import os
 from pathlib import Path
-
+from tqdm import tqdm
+from utils.exctracting_dataset import exctracting_hdf5
 def preprocces_metadata(root_path):
     """
     takes root folder for dataset and gives 2 .txt files with paths for all images
     """
+
     data = {}
     data['dbImage'] = []
     data['qImage'] = []
@@ -30,7 +32,4 @@ def preprocces_metadata(root_path):
 
     print(f'Was loaded {qcount} query and {dbcount} database images')
 
-
-    #depth
-    depth_exts = ['*.npy']
     return query_image_path, db_image_path

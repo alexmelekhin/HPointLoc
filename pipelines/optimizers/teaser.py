@@ -1,7 +1,7 @@
 import teaserpp_python
 from tqdm import tqdm
 import os
-#import h5py
+import h5py
 from utils.functions import quaternion_to_rotation_matrix, clouds3d_from_kpt, is_invertible
 import numpy as np
 from scipy.spatial.transform import Rotation as R
@@ -21,12 +21,9 @@ def teaser(dataset_root, image_retrieval, kpt_matching):
     solver_params.rotation_gnc_factor = 1.4
     solver_params.rotation_max_iterations = 100
     solver_params.rotation_cost_threshold = 1e-12
-    print('Ready to solving')
-    return 
+
     image_retrieval_methods = {'netvlad' : 'NetVLAD', 'hfnet': 'HF-Net', 'apgem': 'AP-GeM', 'patchnetvlad_s': 'PatchNetVLAD_s'}
     pairs_top1_methods = {'hfnet':'/home/musaev_rv/Myfolder/HF-Net_top1.txt', 'apgem':'/home/musaev_rv/Myfolder/AP-GeM_top1.txt', 'netvlad': '/home/musaev_rv/Myfolder/NetVLAD_top1.txt', 'patchnetvlad_s': '/home/musaev_rv/Myfolder/PatchNetVLAD_s_top1.txt'}
-
-
     method = image_retrieval_methods[image_retrieval]
     feature_matching_methods = {'superpoint_superglue': f'/home/musaev_rv/data/extracted_Habitat/map_plus_query/reconstruction/{method}_superpoint_superglue', 'loftr': f'/home/musaev_rv/data/extracted_Habitat/map_plus_query/reconstruction/{method}_loftr', 'r2d2': f'/home/musaev_rv/data/extracted_Habitat/map_plus_query/reconstruction/{method}_r2d2'}
 
