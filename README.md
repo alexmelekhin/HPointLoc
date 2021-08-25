@@ -17,7 +17,7 @@ When forming the dataset, considerable attention was paid to the presence of ins
 </p>
 
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130796173-c3469059-ad58-432e-ade9-8650d5e28ca6.png" />
+  <img src="https://user-images.githubusercontent.com/68793107/130796358-b0349dd6-7a72-489e-8c12-7bd0f605c26c.png" />
 </p>
 
 
