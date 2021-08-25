@@ -6,12 +6,9 @@ This repository provides a novel framework **PNTR** for exploring new indoor dat
 Our paper on deep learning-based visual place recognition contains detailed information about these datasets:
 > BibteX: HPointLoc: open dataset and framework for indoor visual localizationbased on synthetic RGB-D images*
 <p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130795495-888a1636-4390-4526-b733-482dc9ebbc75.png" />
-</p>
+  <img src="https://user-images.githubusercontent.com/68793107/130795690-6417cd00-5c27-4e62-a524-503eab6fdba9.png" />
+</p> 
 
-<p align="center">
-  <img src="https://user-images.githubusercontent.com/68793107/130794517-258a4c06-13c5-4468-b380-eb908fbd7240.png" />
-</p>
 
 When forming the dataset, considerable attention was paid to the presence of instance segmentation of scene objects, which will allow it to be used in new emerging semantic methods for place recognition and localization
 <p align="center">
