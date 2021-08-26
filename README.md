@@ -1,4 +1,4 @@
-# HPointLoc: open dataset and framework for indoor visual localizationbased on synthetic RGB-D images
+# HPointLoc: open dataset and framework for indoor visual localization based on synthetic RGB-D images
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 This repository provides a novel framework **PNTR** for exploring capabilities of new indoor datasets - **HPointLoc**, specially designed to explore detection and loop closure capabilities in Simultaneous Localization and Mapping (SLAM).
