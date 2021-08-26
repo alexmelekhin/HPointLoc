@@ -64,14 +64,18 @@ def keypoints_matching_stage(method, dataset_root, input_pairs, output_dir,):
                                     '--resize', '-1',
                                     '--output_dir', output_dir]
         run_python_command(command, compute_image_pairs_args, None)
+    elif method == 'loftr':
+        pass
 
-def pose_optimization(dataset_root, image_retrieval, kpt_matching, pose_optimization, force):
+def pose_optimization(dataset_root, dataset_opt, result_path, image_retrieval, kpt_matching, pose_optimization, force):
     if pose_optimization == 'teaser':
         if not exists('./3rd/TEASER-plusplus/') or force:
             shutil.rmtree('./3rd/TEASER-plusplus/', ignore_errors=True)
             completed = subprocess.run(['bash', './3rd/teaser.sh'])
             from optimizers.teaser import teaser
-            teaser(dataset_root, image_retrieval, kpt_matching)
+            teaser(dataset_root, dataset_opt, result_path, image_retrieval, kpt_matching)
+        else:
+            pass
 
 
 def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_cloud, topk, result_path, dataset, force):
@@ -114,7 +118,7 @@ def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_c
 
 
     ######optimization
-    pose_optimization(dataset_root, image_retrieval, keypoints_matching, optimizer_cloud, force)
+    pose_optimization(dataset_root, dataset, result_path, image_retrieval, keypoints_matching, optimizer_cloud, force)
 
 
 def pipeline_command_line():
@@ -124,7 +128,7 @@ def pipeline_command_line():
     parser = argparse.ArgumentParser(description=('evaluate place recognition pipeline on Habitat dataset'))
     parser.add_argument('-dst', '--dataset_root', required=True,
                         help='name of image retrieval')
-    parser.add_argument('-f', '-y', '--force', action='store_true', default=False,
+    parser.add_argument('-f', '--force', action='store_true', default=False,
                         help='silently delete data if already exists.')
     parser.add_argument('-imgrtv', '--image-retrieval', required=True,
                         help='name of image retrieval')

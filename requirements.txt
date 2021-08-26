@@ -1,6 +1,6 @@
-opencv_python==4.4.0.46
+
 tensorflow
-faiss
+faiss-gpu
 einops==0.3.0
 kornia==0.4.1
 loguru==0.5.3
@@ -21,5 +21,6 @@ scipy
 pandas
 torchvision
 scikit-learn
-open3d=0.9.0.0
-
+open3d==0.9.0.0
+opencv-python 
+libopenblas

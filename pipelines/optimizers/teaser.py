@@ -6,8 +6,10 @@ from utils.functions import quaternion_to_rotation_matrix, clouds3d_from_kpt, is
 import numpy as np
 from scipy.spatial.transform import Rotation as R
 import re
+from pathlib import Path
 
-def teaser(dataset_root, image_retrieval, kpt_matching):
+def teaser(dataset_root, dataset, result_path, image_retrieval, kpt_matching, topk=1):
+    
     NOISE_BOUND = 0.05
     N_OUTLIERS = 1700
     N_INLIERS = 400
@@ -22,13 +24,9 @@ def teaser(dataset_root, image_retrieval, kpt_matching):
     solver_params.rotation_max_iterations = 100
     solver_params.rotation_cost_threshold = 1e-12
 
-    image_retrieval_methods = {'netvlad' : 'NetVLAD', 'hfnet': 'HF-Net', 'apgem': 'AP-GeM', 'patchnetvlad_s': 'PatchNetVLAD_s'}
-    pairs_top1_methods = {'hfnet':'/home/musaev_rv/Myfolder/HF-Net_top1.txt', 'apgem':'/home/musaev_rv/Myfolder/AP-GeM_top1.txt', 'netvlad': '/home/musaev_rv/Myfolder/NetVLAD_top1.txt', 'patchnetvlad_s': '/home/musaev_rv/Myfolder/PatchNetVLAD_s_top1.txt'}
-    method = image_retrieval_methods[image_retrieval]
-    feature_matching_methods = {'superpoint_superglue': f'/home/musaev_rv/data/extracted_Habitat/map_plus_query/reconstruction/{method}_superpoint_superglue', 'loftr': f'/home/musaev_rv/data/extracted_Habitat/map_plus_query/reconstruction/{method}_loftr', 'r2d2': f'/home/musaev_rv/data/extracted_Habitat/map_plus_query/reconstruction/{method}_r2d2'}
+    path_image_retrieval = join(result_path, dataset, 'image_retrieval', f'{image_retrieval}_top{topk}.txt')
+    path_loc_features_matches = join(result_path, dataset, 'keypoints', f'{image_retrieval}_{keypoints_matching}')
 
-    path_image_retrieval_method = pairs_top1_methods[image_retrieval]
-    path_matches_root = feature_matching_methods[kpt_matching]
     results = {
         "(5m, 20°)": 0,
         "(1m, 10°)": 0,
@@ -42,7 +40,10 @@ def teaser(dataset_root, image_retrieval, kpt_matching):
     teaser_numbers = 0
     query_numbers = 0
 
-    with open(path_image_retrieval_method, 'r') as f:
+    root_datasets = Path(dataset_root).parent
+    dataset_path =  join(root_datasets, 'HPointLoc_dataset  ')
+
+    with open(path_image_retrieval, 'r') as f:
         for pair in tqdm(f.readlines()[2:]):
             query_numbers += 1
             q, m, score = pair.split(', ')
@@ -80,8 +81,10 @@ def teaser(dataset_root, image_retrieval, kpt_matching):
             estimated_quat_xyzw = [estimated_quat_wxyz[1], estimated_quat_wxyz[2], estimated_quat_wxyz[3], estimated_quat_wxyz[0]]
         
             pairpath = q.replace('/','_') + '_' + m.replace('/','_') +'.json'
-            fullpath = os.path.join(path_matches_root, pairpath)
-            #fullpath = re.sub('.png', '', fullpath) #superglue
+            fullpath = os.path.join(path_loc_features_matches, pairpath)
+            if kpt_matching == 'superpoint_superglue':
+                fullpath = re.sub('.png', '', fullpath) 
+
             points_3d_query, points_3d_mapping = clouds3d_from_kpt(fullpath)    
             if points_3d_mapping.shape[1] > 5:  
                 solver = teaserpp_python.RobustRegistrationSolver(solver_params)
@@ -155,5 +158,5 @@ def teaser(dataset_root, image_retrieval, kpt_matching):
     for key in results.keys():
         results[key] = results[key] / query_numbers
 
-    print(results,'\n')       
+    print('>>>> ', results, ' >>>>', '\n')       
     print('Proportion of optimized:', teaser_numbers / query_numbers)

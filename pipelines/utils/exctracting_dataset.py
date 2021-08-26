@@ -5,12 +5,15 @@ import numpy as np
 from tqdm import tqdm
 import h5py
 import argparse
+from os.path import join, exists, isfile
+from pathlib import Path
+import re
 
 def exctracting_hdf5(hdf5_dataset_path, force):
     input_dir = hdf5_dataset_path
-    #dataset_folders = os.listdir(input_dir)
-    dataset_path =  'extracted_HPointLoc'
-    if not os.path.exist(dataset_path) or force:
+    root_datasets = Path(hdf5_dataset_path).parent
+    dataset_path =  join(root_datasets, 'extracted_HPointLoc')
+    if not exists(dataset_path) or force:
         shutil.rmtree(dataset_path, ignore_errors=True) 
         query_path = os.path.join(dataset_path, 'query')
         os.makedirs(query_path, exist_ok=True)
@@ -21,16 +24,15 @@ def exctracting_hdf5(hdf5_dataset_path, force):
         global_counter_db = 0
         w, h, fx, fy, cx, cy = 256, 256, 128, 128, 128, 128
         count = 0
-        os.makedirs('assets', exist_ok=True)
-        for map_name in tqdm(os.listdir(dataset_path)):
+        for map_name in tqdm(os.listdir(input_dir)):
             if map_name.find('.') != -1:
                 continue
 
-            for hdf5_dataset in sorted(os.listdir(os.path.join(dataset_path, map_name))):
+            for hdf5_dataset in sorted(os.listdir(os.path.join(input_dir, map_name))):
                 if hdf5_dataset.find('.hdf5') == -1:
                     continue
             
-                hdf5_dataset_path = os.path.join(dataset_path, map_name, hdf5_dataset)
+                hdf5_dataset_path = os.path.join(input_dir, map_name, hdf5_dataset)
                 file = h5py.File(hdf5_dataset_path, 'r')
                 rgb_base = file['rgb_base']
                 depth_base = file['depth_base']
@@ -94,8 +96,9 @@ def exctracting_hdf5(hdf5_dataset_path, force):
 
 
 if __name__ == '__main__':
-    print('>>>> HPointLoc.hdf5 exctracting.....\n')
+    print('>>>> HPointLoc.hdf5 exctracting >>>>\n')
     parser = argparse.ArgumentParser(description=('evaluate place recognition pipeline on Habitat dataset'))
     parser.add_argument('--dataset_path', required=True, help='path to HPointLoc dataset')
+    parser.add_argument('-f', '--force', action='store_true', default=False, help='overwrite dataset')
     args = parser.parse_args()
-    exctracting_hdf5(args.dataset_path)
+    exctracting_hdf5(args.dataset_path, args.force)

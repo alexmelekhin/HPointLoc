@@ -1,8 +1,8 @@
 import json
 import os
 from pathlib import Path
-from tqdm import tqdm
 from utils.exctracting_dataset import exctracting_hdf5
+
 def preprocces_metadata(root_path):
     """
     takes root folder for dataset and gives 2 .txt files with paths for all images
@@ -23,7 +23,7 @@ def preprocces_metadata(root_path):
             for filename in sorted(paths):
                 if str(filename).find('.png') == -1:
                     continue
-                if (str(filename).find('database') or str(filename).find('mapping')) != -1:
+                if (str(filename).find('database') != -1) or (str(filename).find('mapping') != -1):
                     dbcount += 1
                     dbfile.write(os.path.join(filename) + '\n')
                 if str(filename).find('query') != -1:
