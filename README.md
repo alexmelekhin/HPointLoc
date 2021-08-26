@@ -42,6 +42,8 @@ The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** dataset
   <img src="https://user-images.githubusercontent.com/68793107/130798397-4c4eea5a-1b55-4a0a-9f99-7d498c7b8dfc.png" />
 </p> -->
 
+**HPointLoc** dataset is available by the link https://drive.google.com/drive/folders/1Tic7SuIAASSBpxa5j4Zq_0VaF9rdDav2
+
 ## Quick start to evaluate PNTR pipeline
 
 ```bash
