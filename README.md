@@ -52,8 +52,8 @@ git clone --recurse-submodules https://github.com/cds-mipt/HPointLoc
 conda env create -f environment.yml
 conda activate habitat_pipeline 
 cd /path/to/dataset
-bash download_HPointloc.sh
-python exctracting_dataset.py --dataset_path /path/to/dataset
+bash /path/to/HPointLoc/download_HPointloc.sh
+python /path/to/HPointLoc/ exctracting_dataset.py --dataset_path /path/to/dataset
 cd /HPointLoc
 python pipelines/pipeline_evaluate.py --dataset_root /path/to/extracted_dataset --image-retrieval patchnetvlad --keypoints-matching superpoint_superglue --optimizer-cloud teaser
 ```
