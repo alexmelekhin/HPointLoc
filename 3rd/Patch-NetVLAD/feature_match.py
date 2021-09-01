@@ -49,6 +49,7 @@ import numpy as np
 import faiss
 from tqdm.auto import tqdm
 
+from patchnetvlad.tools.patch_matcher import PatchMatcher
 from patchnetvlad.tools.datasets import PlaceDataset
 from patchnetvlad.models.local_matcher import local_matcher
 from patchnetvlad.tools import PATCHNETVLAD_ROOT_DIR
@@ -69,6 +70,15 @@ def compute_recall(gt, predictions, numQ, n_values, recall_str=''):
         tqdm.write("====> Recall {}@{}: {:.4f}".format(recall_str, n, recall_at_n[i]))
     return all_recalls
 
+def apply_patch_weights(input_scores, num_patches, patch_weights):
+    output_score = 0
+    if len(patch_weights) != num_patches:
+        raise ValueError('The number of patch weights must equal the number of patches used')
+    for i in range(num_patches):
+        output_score = output_score + (patch_weights[i] * input_scores[i])
+    return output_score
+
+
 
 def write_kapture_output(opt, eval_set, predictions, outfile_name):
     if not exists(opt.result_save_folder):
@@ -80,10 +90,10 @@ def write_kapture_output(opt, eval_set, predictions, outfile_name):
         kap_out.write('# query_image, map_image\n')
         image_list_array = np.array(eval_set.images)
         for q_idx in range(len(predictions)):
-            full_paths = image_list_array[predictions[q_idx]]
+            full_paths, score = image_list_array[predictions[q_idx][0]], predictions[q_idx][1]
             query_full_path = image_list_array[eval_set.numDb + q_idx]
             for ref_image_name in full_paths:
-                kap_out.write(query_full_path + ', ' + ref_image_name + '\n')
+                kap_out.write(query_full_path + ', ' + ref_image_name + f', {score}\n')
 
 
 def write_recalls_output(opt, recalls_netvlad, recalls_patchnetvlad, n_values):
@@ -148,30 +158,6 @@ def feature_match(eval_set, device, opt, config):
     reranked_predictions = local_matcher(predictions, eval_set, input_query_local_features_prefix,
                                          input_index_local_features_prefix, config, device)
 
-#    results_txt_file = open(output_txt_file, "w")
-#    results_txt_file.write('# NetVLAD\n')
-#    results_txt_file.write('# query_image database_image L2_metric cos_metric\n')
-#    output = {}
-#    for i, prediction in enumerate(reranked_predictions):
-#        for j, num_db in enumerate(prediction):
-#            # print('query feat')
-#           # print(qFeat[i].shape)
-#            # print('db feat')
-#            # print(dbFeat[num_db].shape)
-#            # print()
-#            dbfeature = dbFeat[num_db]
-#            qfeature = qFeat[i]
-#            dbfeature = np.reshape(dbfeature, (1,-1))
-#            qfeature = np.reshape(qfeature, (1,-1)) 
-#            results_txt_file.write(eval_set.images[query_image_filename + \
-#                                   '  ' + db_image_filename + \
-#                                   '  ' + str(distances[i, j]) + \
-#                                  '  ' + str(cosine_similarity(dbfeature, qfeature)[0][0])] + '\n')
-#
-    #print(len(reranked_predictions), time_patchnetvlad_matching)
-    #end.record()
-    #torch.cuda.synchronize()
-    #time_patchnetvlad_matching.append((start.elapsed_time(end)/1000))
 
     # save predictions to files - Kapture Output
     write_kapture_output(opt, eval_set, predictions, 'NetVLAD_predictions.txt')

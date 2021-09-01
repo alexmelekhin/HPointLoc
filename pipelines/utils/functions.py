@@ -1,3 +1,6 @@
+import json
+from scipy.spatial.transform import Rotation as R
+
 def camera_center_to_translation(c, qvec):
     R = quaternion_to_rotation_matrix(qvec)
     return (-1) * np.matmul(R, c)

@@ -4,78 +4,83 @@ from os.path import join, exists, isfile
 from os import makedirs
 from utils.subprocces import run_python_command
 from utils.preproccesing_dataset import preprocces_metadata
+from utils.conv_to_json import conv_to_json
 import configparser
 import subprocess
 import shutil
 
-def image_retrieval_stage(method, dataset_root, query_path, db_path, image_retrieval_path, topk=1):
+def image_retrieval_stage(method, dataset_root, query_path, db_path, image_retrieval_path, topk = 1, force = False):
     exct_stage = {'apgem': 'PATH.py', 'patchnetvlad':'3rd/Patch-NetVLAD/feature_extract.py', 'netvlad':'PATH.py', 'hfnet':'PATH.py'}
     matching_stage = {'patchnetvlad':'3rd/Patch-NetVLAD/feature_match.py',}
     command = exct_stage[method]
+
     if method == 'patchnetvlad':
-        configfile = '3rd/Patch-NetVLAD/patchnetvlad/configs/{}.ini'.format(input('choose config: speed/performance \n'))
-        assert os.path.isfile(configfile)
-        config = configparser.ConfigParser()
-        config.read(configfile)
-        patch_top = int(config['feature_match']['n_values_all'].split(",")[-1])
-        query_descriptor = '3rd/Patch-NetVLAD/query_descriptor'
-        exctraction_stage_args = ['--config_path', configfile,
-                                '--dataset_file_path', query_path,
-                                '--dataset_root_dir', dataset_root, 
-                                '--output_features_dir', query_descriptor]
-        run_python_command(command, exctraction_stage_args, None)
-
-        db_descriptor = '3rd/Patch-NetVLAD/db_descriptor'
-        exctraction_stage_args = ['--config_path', configfile,
-                                '--dataset_file_path', db_path,
-                                '--dataset_root_dir', dataset_root,
-                                '--output_features_dir', db_descriptor]
-        run_python_command(command, exctraction_stage_args, None)
-        
-        command = matching_stage[method]
-        matching_stage_args = ['--config_path', configfile,
-                                '--dataset_root_dir', dataset_root, 
-                                '--query_file_path', query_path,
-                                '--index_file_path', db_path,
-                                '--query_input_features_dir', query_descriptor,
-                                '--index_input_features_dir', db_descriptor,
-                                '--result_save_folder', image_retrieval_path ]
-        run_python_command(command, matching_stage_args, None)
-
-        #get topk reranked
-        pairsfile_path = f'{method}_top{topk}.txt'
+        option = input('choose config: speed/performance \n')
+        pairsfile_path = f'{method}_{option}_top{topk}.txt'
         pairsfile_path_full = join(image_retrieval_path, pairsfile_path)
-        with open(join(image_retrieval_path , 'PatchNetVLAD_predictions.txt'), 'r') as origfile, \
-            open(pairsfile_path_full, 'w') as topkfile:  
-                for line in origfile.readlines()[2::patch_top]:
-                    query_string, mapping_string = map(lambda x: x.split('\n')[0], line.split(', ')) 
-                    string = query_string + ', ' + mapping_string + ', 1\n'
-                    topkfile.write(string)  
-    else:
-        pass
-    
+        if not exists(pairsfile_path_full) or force:    
+            configfile = '3rd/Patch-NetVLAD/patchnetvlad/configs/{}.ini'.format(option)
+            assert os.path.isfile(configfile)
+            config = configparser.ConfigParser()
+            config.read(configfile)
+            patch_top = int(config['feature_match']['n_values_all'].split(",")[-1])
 
-def keypoints_matching_stage(method, dataset_root, input_pairs, output_dir,):
-    methods = {'r2d2': ['PATH.py', 'PATH_k.py'], 'loftr':'PATH.py', 'superpoint_superglue':'3rd/SuperGluePretrainedNetwork/match_pairs.py',}
+            query_descriptor = join(dataset_root, 'query_descriptor')
+            exctraction_stage_args = ['--config_path', configfile,
+                                    '--dataset_file_path', query_path,
+                                    '--dataset_root_dir', dataset_root, 
+                                    '--output_features_dir', query_descriptor]
+            run_python_command(command, exctraction_stage_args, None)
+
+            db_descriptor = join(dataset_root, 'db_descriptor')
+            exctraction_stage_args = ['--config_path', configfile,
+                                    '--dataset_file_path', db_path,
+                                    '--dataset_root_dir', dataset_root,
+                                    '--output_features_dir', db_descriptor]
+            run_python_command(command, exctraction_stage_args, None)
+            
+            command = matching_stage[method]
+            matching_stage_args = ['--config_path', configfile,
+                                    '--dataset_root_dir', dataset_root, 
+                                    '--query_file_path', query_path,
+                                    '--index_file_path', db_path,
+                                    '--query_input_features_dir', query_descriptor,
+                                    '--index_input_features_dir', db_descriptor,
+                                    '--result_save_folder', image_retrieval_path ]
+            run_python_command(command, matching_stage_args, None)
+
+            #get topk reranked
+            with open(join(image_retrieval_path , 'PatchNetVLAD_predictions.txt'), 'r') as origfile, \
+                open(pairsfile_path_full, 'w') as topkfile:  
+                    for line in origfile.readlines()[2::patch_top]:
+                        query_string, mapping_string = map(lambda x: x.split('\n')[0], line.split(', ')) 
+                        string = query_string + ', ' + mapping_string + ', 1\n'
+                        topkfile.write(string)  
+        else:
+            print('image retrieval results already computed:......')
+
+        return pairsfile_path_full
+
+def keypoints_matching_stage(method, dataset_root, input_pairs, output_dir):
+    methods = {'superpoint_superglue':'3rd/SuperGluePretrainedNetwork/match_pairs.py'}
     command = methods[method]
     if method == 'superpoint_superglue':
         compute_image_pairs_args = ['--input_pairs', input_pairs,
                                     '--input_dir', dataset_root,  
-                                    '--resize', '-1',
-                                    '--output_dir', output_dir]
+                                    '--resize', '-1']
         run_python_command(command, compute_image_pairs_args, None)
-    elif method == 'loftr':
-        pass
+        conv_to_json(dataset_root, '3rd/SuperGluePretrainedNetwork/dump_match_pairs', output_dir)
+        assert 1==0
 
-def pose_optimization(dataset_root, dataset_opt, result_path, image_retrieval, kpt_matching, pose_optimization, force):
+
+def pose_optimization(dataset_root, dataset_option, result_path, image_retrieval, kpt_matching, pose_optimization, force):
     if pose_optimization == 'teaser':
         if not exists('./3rd/TEASER-plusplus/') or force:
             shutil.rmtree('./3rd/TEASER-plusplus/', ignore_errors=True)
             completed = subprocess.run(['bash', './3rd/teaser.sh'])
-            from optimizers.teaser import teaser
-            teaser(dataset_root, dataset_opt, result_path, image_retrieval, kpt_matching)
-        else:
-            pass
+        from optimizers.teaser import teaser
+        teaser(dataset_root, dataset_option, result_path, image_retrieval, kpt_matching)
+
 
 
 def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_cloud, topk, result_path, dataset, force):
@@ -89,19 +94,13 @@ def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_c
     root_dir = os.getcwd()
     query_image_path, db_image_path = preprocces_metadata(dataset_root)
 
-    #######image retrieval
+    # #######image retrieval
     image_retrieval_path = join(root_dir, result_path, dataset, 'image_retrieval')
     if not exists(image_retrieval_path):
         os.makedirs(image_retrieval_path)
-    #print('root directory:', root_dir)
-    pairsfile_path = f'{image_retrieval}_top{topk}.txt'
-    pairsfile_path_full = join(image_retrieval_path, pairsfile_path)
-
-    if not exists(pairsfile_path_full) or force:
-        image_retrieval_stage(image_retrieval, dataset_root, query_image_path, db_image_path, image_retrieval_path, topk)
     
-    else:
-        print('image retrieval results already computed:......')
+    pairsfile_path_full = image_retrieval_stage(image_retrieval, dataset_root, query_image_path, db_image_path, image_retrieval_path, topk, force)
+        
  
     ######local features
     local_featue_path = join(root_dir, result_path, dataset, 'keypoints')
@@ -110,7 +109,7 @@ def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_c
 
     keypoints_path = f'{image_retrieval}_{keypoints_matching}'
     local_features_path_full =  join(local_featue_path, keypoints_path)
-    if not exists(local_features_path_full) or force: 
+    if not exists(local_features_path_full) or force:
         keypoints_matching_stage(keypoints_matching, dataset_root, pairsfile_path_full, local_features_path_full)
 
     else:

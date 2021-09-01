@@ -164,8 +164,18 @@ def local_matcher(predictions, eval_set, input_query_local_features_prefix,
 
             diffs[k, :], _, _ = matcher.match(qfeat, dbfeat)
 
+        score = [] 
+        for j in range(k):
+            scores = -apply_patch_weights(diffs[j, :], len(patch_sizes), patch_weights)
+            score.append(scores)
+
         diffs = normalise_func(diffs, len(patch_sizes), patch_weights)
+        
         cand_sorted = np.argsort(diffs)
-        reordered_preds.append(pred[cand_sorted])
+        cand_sorted_2 = np.argsort(score)
+        assert (cand_sorted == cand_sorted_2).all()
+        score = np.sort(diffs)
+        reordered_preds.append((pred[cand_sorted], score))
+        print(reordered_preds[0], score)
 
     return reordered_preds

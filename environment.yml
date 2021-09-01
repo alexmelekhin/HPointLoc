@@ -1,4 +1,4 @@
-name: habitat_pipeline
+name: PTNR_pipeline
 
 channels:
 - defaults 
