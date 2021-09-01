@@ -8,6 +8,3 @@
 	path = cdxslam
 	url = https://github.com/cds-mipt/cdxslam
 	branch = hf_net_habitat
-[submodule "3rd/kapture"]
-	path = 3rd/kapture
-	url = https://github.com/cds-mipt/HPointLoc.git
