@@ -53,7 +53,7 @@ conda env create -f environment.yml
 conda activate PTNR_pipeline 
 cd /path/to/dataset
 bash /path/to/HPointLoc_repo/download_HPointloc.sh
-python /path/to/HPointLoc_repo/utils/exctracting_dataset.py --dataset_path /path/to/dataset/HPointLoc_dataset
+python /path/to/HPointLoc_repo/pipelines/utils/exctracting_dataset.py --dataset_path /path/to/dataset/HPointLoc_dataset
 cd /path/to/HPointLoc_repo
 python pipelines/pipeline_evaluate.py --dataset_root /path/to/extracted_dataset --image-retrieval patchnetvlad --keypoints-matching superpoint_superglue --optimizer-cloud teaser
 ```
