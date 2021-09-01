@@ -50,7 +50,7 @@ The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** dataset
 ```bash
 git clone --recurse-submodules https://github.com/cds-mipt/HPointLoc
 conda env create -f environment.yml
-conda activate habitat_pipeline 
+conda activate PTNR_pipeline 
 cd /path/to/dataset
 bash /path/to/HPointLoc_repo/download_HPointloc.sh
 python /path/to/HPointLoc_repo/exctracting_dataset.py --dataset_path /path/to/dataset/HPointLoc_dataset
