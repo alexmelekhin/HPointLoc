@@ -23,7 +23,7 @@ def exctracting_hdf5(hdf5_dataset_path, force):
         global_counter_query = 0
         global_counter_db = 0
         w, h, fx, fy, cx, cy = 256, 256, 128, 128, 128, 128
-        count = 0
+        #count = 0
         for map_name in tqdm(os.listdir(input_dir)):
             if map_name.find('.') != -1:
                 continue

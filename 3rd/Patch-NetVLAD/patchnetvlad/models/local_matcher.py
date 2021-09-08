@@ -125,6 +125,14 @@ def normalise_func(input_diff, num_patches, patch_weights):
             (input_diff[:, i] - np.mean(input_diff[:, i])) / np.std(input_diff[:, i]))
     return normed_diff
 
+def apply_patch_weights(input_scores, num_patches, patch_weights):
+    output_score = 0
+    if len(patch_weights) != num_patches:
+        raise ValueError('The number of patch weights must equal the number of patches used')
+    for i in range(num_patches):
+        output_score = output_score + (patch_weights[i] * input_scores[i])
+    return output_score
+
 
 def local_matcher(predictions, eval_set, input_query_local_features_prefix,
                   input_index_local_features_prefix, config, device):
@@ -155,6 +163,8 @@ def local_matcher(predictions, eval_set, input_query_local_features_prefix,
             qfilename = input_query_local_features_prefix + '_' + 'psize{}_'.format(patch_size) + image_name_query + '.npy'
             qfeat.append(torch.transpose(torch.tensor(np.load(qfilename), device=device), 0, 1))
             # we pre-transpose here to save compute speed
+        inlier_keypoints_one, inlier_keypoints_two = [0]*predictions.shape[1], [0]*predictions.shape[1]
+        scores = [0]*predictions.shape[1]
         for k, candidate in enumerate(pred):
             image_name_index = os.path.splitext('_'.join(eval_set.images[candidate].split('/')[-3:]))[0]
             dbfeat = []
@@ -162,20 +172,22 @@ def local_matcher(predictions, eval_set, input_query_local_features_prefix,
                 dbfilename = input_index_local_features_prefix + '_' + 'psize{}_'.format(patch_size) + image_name_index + '.npy'
                 dbfeat.append(torch.tensor(np.load(dbfilename), device=device))
 
-            diffs[k, :], _, _ = matcher.match(qfeat, dbfeat)
-
-        score = [] 
-        for j in range(k):
-            scores = -apply_patch_weights(diffs[j, :], len(patch_sizes), patch_weights)
-            score.append(scores)
+            diffs[k, :], inlier_keypoints_one[k], inlier_keypoints_two[k] = matcher.match(qfeat, dbfeat)
+            scores[k] = -apply_patch_weights(diffs[k, :], len(patch_sizes), patch_weights)
+        # score = [] 
+        # for j in range(k):
+        #     scores = -apply_patch_weights(diffs[j, :], len(patch_sizes), patch_weights)
+        #     score.append(scores)
 
         diffs = normalise_func(diffs, len(patch_sizes), patch_weights)
         
         cand_sorted = np.argsort(diffs)
-        cand_sorted_2 = np.argsort(score)
-        assert (cand_sorted == cand_sorted_2).all()
+        cand_sorted_2 = np.argsort(scores)
+        #assert cand_sorted == cand_sorted_2
         score = np.sort(diffs)
-        reordered_preds.append((pred[cand_sorted], score))
-        print(reordered_preds[0], score)
+        diffs = sorted(diffs, key = lambda x:-x)
+        reordered_preds.append((pred[cand_sorted], diffs))
 
+        
+        
     return reordered_preds

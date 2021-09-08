@@ -8,8 +8,10 @@ def preprocces_metadata(root_path):
     """
     takes root folder for dataset and gives 2 .txt files with paths for all images
     """
+    
     db_image_path = 'database_images_path.txt'
     query_image_path = 'query_images_path.txt'
+
     if not exists(db_image_path) or not exists(query_image_path):
         data = {}
         data['dbImage'] = []
@@ -18,7 +20,7 @@ def preprocces_metadata(root_path):
         paths = []
         for ext in exts:
             paths += list(Path(root_path).glob('**/'+ext))
-        
+
         qcount = dbcount = 0
         with open(db_image_path, 'w') as dbfile, \
             open(query_image_path, 'w') as qfile:

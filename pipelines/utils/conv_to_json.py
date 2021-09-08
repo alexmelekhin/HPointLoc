@@ -5,12 +5,15 @@ import os
 import numpy as np
 from pathlib import Path
 import json
+import numpy as np
+
+MAXDEPTH = 10
 
 def conv_to_json(dataset_root, path_to_npz_folder, output_dir):
     root_datasets = Path(dataset_root).parent
     dataset_path =  join(root_datasets, 'HPointLoc_dataset')
     pairs_npz = os.listdir(path_to_npz_folder) 
-
+    os.makedirs(output_dir, exist_ok = True)
     for pair_npz in tqdm(pairs_npz):
         npz = np.load(join(path_to_npz_folder, pair_npz))
         q_fold, q_cloud, query, q_name = pair_npz.split('_')[:4] 
@@ -30,8 +33,8 @@ def conv_to_json(dataset_root, path_to_npz_folder, output_dir):
         depth_base = m_file['depth_base']
         depth = q_file['depth']
 
-        q_depth = depth[int(q_name)]
-        m_depth = depth_base[int(m_name)]
+        q_depth = np.squeeze(depth[int(q_name)])*MAXDEPTH
+        m_depth = np.squeeze(depth_base[int(m_name)])*MAXDEPTH
 
         q_coord_frame = []
         m_coord_frame = []
@@ -41,10 +44,10 @@ def conv_to_json(dataset_root, path_to_npz_folder, output_dir):
                 x_q, y_q = map(int, npz['keypoints0'][kpt])
                 x_m, y_m = map(int, npz['keypoints1'][npz['matches'][kpt]])
                 
-                q_coord_frame.append((x_q, y_q, q_depth[y_q, x_q]))
-                m_coord_frame.append((x_m, y_m, m_depth[y_m, x_m]))
+                q_coord_frame.append((x_q, y_q, float(q_depth[y_q, x_q])))
+                m_coord_frame.append((x_m, y_m, float(m_depth[y_m, x_m])))
     
         dictionary_kpt = {q: q_coord_frame, m:m_coord_frame}
-        outpath = join(output_dir, q + '_'  + m + '.json')
+        outpath = join(output_dir, q + '_' + m + '.json')
         with open(outpath, 'w') as outfile:
             json.dump(str(dictionary_kpt), outfile)

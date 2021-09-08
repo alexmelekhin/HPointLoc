@@ -90,10 +90,27 @@ def write_kapture_output(opt, eval_set, predictions, outfile_name):
         kap_out.write('# query_image, map_image\n')
         image_list_array = np.array(eval_set.images)
         for q_idx in range(len(predictions)):
-            full_paths, score = image_list_array[predictions[q_idx][0]], predictions[q_idx][1]
+            full_paths = image_list_array[predictions[q_idx]]
             query_full_path = image_list_array[eval_set.numDb + q_idx]
             for ref_image_name in full_paths:
+                kap_out.write(query_full_path + ', ' + ref_image_name + '\n')
+
+
+def write_kapture_output2(opt, eval_set, predictions, outfile_name):
+    if not exists(opt.result_save_folder):
+        os.mkdir(opt.result_save_folder)
+    outfile = join(opt.result_save_folder, outfile_name)
+    print('Writing results to', outfile)
+    with open(outfile, 'w') as kap_out:
+        kap_out.write('# kapture format: 1.0\n')
+        kap_out.write('# query_image, map_image\n')
+        image_list_array = np.array(eval_set.images)
+        for q_idx in range(len(predictions)):
+            full_paths, scores = image_list_array[predictions[q_idx][0]], predictions[q_idx][1]
+            query_full_path = image_list_array[eval_set.numDb + q_idx]
+            for ref_image_name, score in zip(full_paths, scores):
                 kap_out.write(query_full_path + ', ' + ref_image_name + f', {score}\n')
+
 
 
 def write_recalls_output(opt, recalls_netvlad, recalls_patchnetvlad, n_values):
@@ -161,7 +178,7 @@ def feature_match(eval_set, device, opt, config):
 
     # save predictions to files - Kapture Output
     write_kapture_output(opt, eval_set, predictions, 'NetVLAD_predictions.txt')
-    write_kapture_output(opt, eval_set, reranked_predictions, 'PatchNetVLAD_predictions.txt')
+    write_kapture_output2(opt, eval_set, reranked_predictions, 'PatchNetVLAD_predictions.txt')
 
     print('Finished matching features.\n')
 #    print('average time for patchnetvlad_matching :', sum(time_patchnetvlad_matching)/(len(reranked_predictions)*len(time_patchnetvlad_matching)))

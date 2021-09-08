@@ -1,5 +1,4 @@
 import teaserpp_python
-from tqdm import tqdm
 import os
 import h5py
 from utils.functions import quaternion_to_rotation_matrix, clouds3d_from_kpt, is_invertible
@@ -7,13 +6,16 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 import re
 from pathlib import Path
-from os.path import join, exists, isfile
+from os.path import join
+import json
 
-def teaser(dataset_root, dataset, result_path, image_retrieval, keypoints_matching, topk=1):
-    
+os.environ["OMP_NUM_THREADS"] = "12"
+
+def teaser(dataset_root, path_image_retrieval, path_loc_features_matches, output_dir, topk=1):
     NOISE_BOUND = 0.05
     N_OUTLIERS = 1700
     N_INLIERS = 400
+    OMP_NUM_THREADS=12
     OUTLIER_TRANSLATION_LB = 5
     OUTLIER_TRANSLATION_UB = 10
     solver_params = teaserpp_python.RobustRegistrationSolver.Params()
@@ -25,15 +27,8 @@ def teaser(dataset_root, dataset, result_path, image_retrieval, keypoints_matchi
     solver_params.rotation_max_iterations = 100
     solver_params.rotation_cost_threshold = 1e-12
 
-
-
     root_datasets = Path(dataset_root).parent
     dataset_path =  join(root_datasets, 'HPointLoc_dataset')
-
-    root = os.getcwd()
-    path_image_retrieval = join(root, result_path, dataset, 'image_retrieval', f'{image_retrieval}_top{topk}.txt')
-    path_loc_features_matches = join(root, result_path, dataset, 'keypoints', f'{image_retrieval}_{keypoints_matching}')
-    print(path_image_retrieval)
 
     results = {
         "(5m, 20°)": 0,
@@ -47,9 +42,10 @@ def teaser(dataset_root, dataset, result_path, image_retrieval, keypoints_matchi
     }
     teaser_numbers = 0
     query_numbers = 0
-
-    with open(path_image_retrieval, 'r') as f:
-        for pair in tqdm(f.readlines()[2:]):
+    os.makedirs(output_dir, exist_ok = True)
+    path_result_poses = join(output_dir, 'PNTR.json')
+    with open(path_image_retrieval, 'r') as f, open(path_result_poses, 'w') as file2:
+        for pair in f.readlines()[2:]:
             query_numbers += 1
             q, m, score = pair.split(', ')
             q = q.split('records_data/')[1]
@@ -87,18 +83,15 @@ def teaser(dataset_root, dataset, result_path, image_retrieval, keypoints_matchi
             estimated_transl = gps_base[m_name]
             estimated_quat_wxyz = quat_base[m_name]
             estimated_quat_xyzw = [estimated_quat_wxyz[1], estimated_quat_wxyz[2], estimated_quat_wxyz[3], estimated_quat_wxyz[0]]
-        
+
             pairpath = q.replace('/','_') + '_' + m.replace('/','_') +'.json'
             fullpath = os.path.join( path_loc_features_matches, pairpath)
-            if keypoints_matching == 'superpoint_superglue':
-                fullpath = re.sub('.json', '_matches.npz', re.sub('.png', '', fullpath))
-                print(fullpath)
+            fullpath = re.sub('.png', '', fullpath)
 
             points_3d_query, points_3d_mapping = clouds3d_from_kpt(fullpath)    
-            if points_3d_mapping.shape[1] > 5:  
+            if points_3d_mapping.shape[1] > 1:  
                 solver = teaserpp_python.RobustRegistrationSolver(solver_params)
                 solver.solve(points_3d_mapping, points_3d_query)
-
                 Rotation = solver.getSolution().rotation
                 translation = solver.getSolution().translation
                 scale = solver.getSolution().scale
@@ -107,7 +100,6 @@ def teaser(dataset_root, dataset, result_path, image_retrieval, keypoints_matchi
                 gt_mapping_4x4[:3,:3] = quaternion_to_rotation_matrix(estimated_quat_wxyz)
                 gt_mapping_4x4[:3,3] = estimated_transl
                 gt_mapping_4x4[-1,-1] = 1
-
 
                 translation_4x4 = list(translation)
                 translation_4x4.append(1.0)
@@ -144,8 +136,7 @@ def teaser(dataset_root, dataset, result_path, image_retrieval, keypoints_matchi
             rotvec = r.as_rotvec()
             angle_error = (np.sum(rotvec**2)**0.5) * 180 / 3.14159265353
             angle_error = abs(90 - abs(angle_error-90))
-
-
+            
             if  dist_error < 0.25:
                 results["(0.25m)"] += 1
             if  dist_error < 0.5:
@@ -164,8 +155,11 @@ def teaser(dataset_root, dataset, result_path, image_retrieval, keypoints_matchi
             if angle_error < 20 and dist_error < 5:
                 results["(5m, 20°)"] += 1
 
+            final_res = {q: (m, estimated_quat_wxyz + estimated_transl + gt_quat_wxyz + gt_transl)} #qw, qx, qy, qz, tx, ty, tz, x3
+            json.dump(str(final_res), path_result_poses)
+            
     for key in results.keys():
         results[key] = results[key] / query_numbers
 
-    print('>>>> ', results, ' >>>>', '\n')       
+    print('>>>> \n', results, '\n>>>>',)       
     print('Proportion of optimized:', teaser_numbers / query_numbers)
