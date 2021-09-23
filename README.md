@@ -21,7 +21,8 @@ The dataset is split into two parts: the validation HPointLoc-Val, which contain
   <img src="https://user-images.githubusercontent.com/68793107/130805029-d76ce041-10a4-47c4-91dd-52a50908ff39.png" />
 </p>
 
-### **HPointLoc** dataset is available by the link: https://drive.google.com/drive/folders/1Tic7SuIAASSBpxa5j4Zq_0VaF9rdDav2
+**HPointLoc** dataset is available by the link:
+https://drive.google.com/drive/folders/1Tic7SuIAASSBpxa5j4Zq_0VaF9rdDav2
 
 
 ## Publications + attribution/citation
