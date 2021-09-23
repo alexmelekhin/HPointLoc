@@ -25,10 +25,6 @@ The dataset is split into two parts: the validation HPointLoc-Val, which contain
 https://drive.google.com/drive/folders/1Tic7SuIAASSBpxa5j4Zq_0VaF9rdDav2
 
 
-## Publications + attribution/citation
-
-D. Yudin, Y. Solomentsev, R. Musaev, A. Staroverov, and A. Panov “HPointLoc open dataset and framework for indoor visual localization based on synthetic RGB D images”  https://github.com/cds-mipt/HPointLoc
-
 ## Experimental results
 
 The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** datasets.
