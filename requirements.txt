@@ -22,4 +22,4 @@ torchvision
 scikit-learn
 open3d==0.9.0.0
 opencv-python 
-libopenblas
+#libopenblas

@@ -1,18 +1,28 @@
 import argparse
 import os
-from os.path import join, exists, isfile
+from os.path import join, exists
 from utils.subprocces import run_python_command
 from utils.preproccesing_dataset import preprocces_metadata
-from utils.conv_to_json2 import conv_to_json
+from utils.conv_to_json import conv_to_json
 from utils.loftr_3rd import loftr
 import configparser
 import subprocess
 import shutil
-from optimizers.icp2 import icp
+from optimizers.icp import icp
 
+def image_retrieval_stage(method, dataset_root, query_path, db_path, 
+                            image_retrieval_path, topk = 1, force = False):
+    """
+    @:param method: name of image retrieval method
+    @:param dataset_root: path to dataset
+    @:param query_path: path to .txt file with paths to the query image
+    @:param db_path: path to .txt file with paths to the db image
+    @:param image_retrieval_path: path to output folder
+    @:param topk: top-k ranked images from db
+    """
 
-def image_retrieval_stage(method, dataset_root, query_path, db_path, image_retrieval_path, topk = 1, force = False):
-    exct_stage = {'apgem': 'PATH.py', 'patchnetvlad':'3rd/Patch-NetVLAD/feature_extract.py', 'netvlad':'PATH.py', 'hfnet':'PATH.py'}
+    exct_stage = {'apgem': 'PATH.py', 'patchnetvlad':'3rd/Patch-NetVLAD/feature_extract.py', 
+                                        'netvlad':'PATH.py', 'hfnet':'PATH.py'}
     matching_stage = {'patchnetvlad':'3rd/Patch-NetVLAD/feature_match.py',}
     command = exct_stage[method]
 
@@ -63,10 +73,20 @@ def image_retrieval_stage(method, dataset_root, query_path, db_path, image_retri
                         topkfile.write(string)  
         else:
             print('image retrieval results already computed:......')
+    else:
+        raise Exception("Wrong name of image retrieval method")
 
-        return pairsfile_path_full
+    return pairsfile_path_full
 
-def keypoints_matching_stage(method, dataset_root, input_pairs, output_dir, force = False, root_dir = None):
+def keypoints_matching_stage(method, dataset_root, input_pairs, 
+                                        output_dir, force = False, root_dir = None):
+    """
+    @:param method: name of keypoints matching method
+    @:param dataset_root: path to dataset
+    @:param input_pairs: path to pairs (from image retrieval stage)
+    @:param output_dir: path to output folder
+    @:param topk: top-k ranked images from db
+    """
     if method == 'superpoint_superglue':
         command = '3rd/SuperGluePretrainedNetwork/match_pairs.py'
         if not exists('./3rd/SuperGluePretrainedNetwork/dump_match_pairs') or force:    
@@ -83,28 +103,36 @@ def keypoints_matching_stage(method, dataset_root, input_pairs, output_dir, forc
             conv_to_json(dataset_root, './3rd/SuperGluePretrainedNetwork/dump_match_pairs', output_dir) 
     elif method == 'loftr':
         loftr(dataset_root, input_pairs, output_dir, root_dir)
+    else:
+        raise Exception("Wrong name of keypoints-matching method")
 
-
-        
-
-def pose_optimization(dataset_root, image_retrieval, kpt_matching, pose_optimization, force, output_dir, topk = 1):
+def pose_optimization(dataset_root, image_retrieval, kpt_matching, 
+                                    pose_optimization, force, output_dir, topk = 1):
+    """
+    @:param dataset_root: path to dataset
+    @:param image_retrieval: name of image retrieval method
+    @:param kpt_matching: name of keypoints matching method
+    @:param pose_optimization: name of point cloud optimization method
+    """
     if pose_optimization == 'teaser':
         if not exists('./3rd/TEASER-plusplus/') or force:
             shutil.rmtree('./3rd/TEASER-plusplus/', ignore_errors=True)
             completed = subprocess.run(['bash', './3rd/teaser.sh'])
-        from optimizers.teaser2 import teaser
+        from optimizers.teaser import teaser
         print('>>>> TEASER++ Point cloud registration')
         teaser(dataset_root, image_retrieval, kpt_matching, output_dir)
 
     elif pose_optimization == 'icp':
         print('>>>> ICP Point cloud registration')
         icp(dataset_root, image_retrieval, kpt_matching, output_dir)
+    else:
+        raise Exception("Wrong name of pose_optimization method")
 
-
-def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_cloud, topk, result_path, dataset, force):
+def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, 
+                                optimizer_cloud, topk, result_path, dataset, force):
 
     """
-    Evaluate place recognition pipeline. Pipeline consist of 3 stages:
+    Evaluate Place recognition pipeline. Pipeline consists of 3 stages:
     - image retrieval
     - keypoints matching
     - 3d pose optimization (registration)
@@ -112,27 +140,28 @@ def pipeline_eval(dataset_root, image_retrieval, keypoints_matching, optimizer_c
     root_dir = os.getcwd()
     query_image_path, db_image_path = preprocces_metadata(dataset_root)
 
-    # #######image retrieval
+    ###image retrieval
     image_retrieval_path = join(root_dir, result_path, dataset, 'image_retrieval')
     if not exists(image_retrieval_path):
         os.makedirs(image_retrieval_path)
     
-    pairsfile_path_full = image_retrieval_stage(image_retrieval, dataset_root, query_image_path, db_image_path, image_retrieval_path, topk, force)
+    pairsfile_path_full = image_retrieval_stage(image_retrieval, dataset_root, query_image_path, 
+                                                    db_image_path, image_retrieval_path, topk, force)
         
- 
-    ######local features
+    ###local features
     local_featue_path = join(root_dir, result_path, dataset, 'keypoints')
     if not exists(local_featue_path):
         os.makedirs(local_featue_path)
 
     keypoints_path = f'{image_retrieval}_{keypoints_matching}'
     local_features_path_full =  join(local_featue_path, keypoints_path)
-    keypoints_matching_stage(keypoints_matching, dataset_root, pairsfile_path_full, local_features_path_full, force, root_dir)
+    keypoints_matching_stage(keypoints_matching, dataset_root, pairsfile_path_full, 
+                                    local_features_path_full, force, root_dir)
 
-    ######optimization
+    ###point cloud optimization
     output_dir = join(root_dir, result_path, dataset, 'pose_optimization')
-    pose_optimization(dataset_root, pairsfile_path_full, local_features_path_full, optimizer_cloud, force, output_dir, topk)
-
+    pose_optimization(dataset_root, pairsfile_path_full, local_features_path_full, 
+                                    optimizer_cloud, force, output_dir, topk)
 
 def pipeline_command_line():
     """
@@ -151,11 +180,11 @@ def pipeline_command_line():
                         help='name of 3d point-cloud optimizer')    
     parser.add_argument('--topk',  default=1, help='top k image-retrievals')
     parser.add_argument('--result-path',  default='result', help='path to result of evaluation')
-    parser.add_argument('--dataset',   default='val', type=str, choices=['val', 'full'], help='1 map of dataset')
+    parser.add_argument('--dataset',   default='val', type=str, choices=['val', 'full'], help='maps of dataset')
 
     args = parser.parse_args()
-    pipeline_eval(args.dataset_root , args.image_retrieval, args.keypoints_matching, args.optimizer_cloud, args.topk, args.result_path, args.dataset, args.force)
-
+    pipeline_eval(args.dataset_root , args.image_retrieval, args.keypoints_matching, 
+                args.optimizer_cloud, args.topk, args.result_path, args.dataset, args.force)
 
 if __name__ == '__main__':    
     print('>>>> PNTR framework\n')
