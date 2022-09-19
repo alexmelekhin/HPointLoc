@@ -21,8 +21,13 @@ The dataset is split into two parts: the validation HPointLoc-Val, which contain
   <img src="https://user-images.githubusercontent.com/68793107/130805029-d76ce041-10a4-47c4-91dd-52a50908ff39.png" />
 </p>
 
-**HPointLoc Val** dataset is available by the link:
-https://drive.google.com/drive/folders/14_UBWF4CgLiwdmbj0GFFWzgHPITjCcNx?usp=sharing
+
+### Download links
+
+**HPointLoc** dataset is available by the following links:
+
+- Whole dataset: [disk.yandex](https://disk.yandex.ru/d/UJqZKojwOtGvTQ)
+- "Val" subsection only: [disk.yandex](https://disk.yandex.ru/d/FN-D-krupeETHg)
 
 ## Experimental results
 
