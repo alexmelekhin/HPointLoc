@@ -12,20 +12,20 @@ import sys
 MAXDEPTH = 10
 
 def loftr(dataset_path, input_pairs, output_dir, root_dir):
-    sys.path.append(join(root_dir, '3rd/LoFTR/src/loftr/loftr.py'))
+    sys.path.append(join(root_dir, 'PNTR/LoFTR/src/loftr/loftr.py'))
     for p in sys.path:
         print(p)
     from loftr import LoFTR, default_cfg
 
-    os.makedirs('3rd/LoFTR/weights', exist_ok = True)
+    os.makedirs('PNTR/LoFTR/weights', exist_ok = True)
     repo_dir = os.getcwd()
-    os.chdir('3rd/LoFTR/weights')
+    os.chdir('PNTR/LoFTR/weights')
     exctraction_stage_args = ['--id', '1w1Qhea3WLRMS81Vod_k5rxS_GNRgIi-O']
     run_python_command('gdown', exctraction_stage_args, notbash = False)
     os.chdir(repo_dir)
     assert 1==0
     matcher = LoFTR(config=default_cfg)
-    matcher.load_state_dict(torch.load("/home/musaev_rv/Myfolder/indoor_ds.ckpt")['state_dict'])
+    matcher.load_state_dict(torch.load("./indoor_ds.ckpt")['state_dict'])
     matcher = matcher.eval().cuda()
     os.makedirs(output_dir, exist_ok = True)
     outpath = join(output_dir, q + '_' + m + '.json')

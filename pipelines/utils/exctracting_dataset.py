@@ -11,8 +11,10 @@ import re
 
 def exctracting_hdf5(hdf5_dataset_path, force):
     input_dir = hdf5_dataset_path
-    root_datasets = Path(hdf5_dataset_path).parent
-    dataset_path =  join(root_datasets, 'extracted_HPointLoc')
+    # root_datasets = Path(hdf5_dataset_path)
+    dataset_path =  join(input_dir, 'extracted_HPointLoc')
+    print(dataset_path)
+    print(exists(dataset_path))
     if not exists(dataset_path) or force:
         shutil.rmtree(dataset_path, ignore_errors=True) 
         query_path = os.path.join(dataset_path, 'query')
@@ -25,10 +27,17 @@ def exctracting_hdf5(hdf5_dataset_path, force):
         w, h, fx, fy, cx, cy = 256, 256, 128, 128, 128, 128
         #count = 0
         for map_name in tqdm(os.listdir(input_dir)):
+            if (map_name == "extracted_HPointLoc"):
+                continue
+            if (map_name.find(".") != -1):
+                continue
+            if (map_name == "_info"):
+                continue
             if map_name.find('.') != -1:
                 continue
-
+            print("map_name: {}".format(map_name))
             for hdf5_dataset in sorted(os.listdir(os.path.join(input_dir, map_name))):
+                # print("hdf5_dataset: {}".format(hdf5_dataset))
                 if hdf5_dataset.find('.hdf5') == -1:
                     continue
             
@@ -92,7 +101,7 @@ def exctracting_hdf5(hdf5_dataset_path, force):
                     global_counter_db += 1
 
                     cv2.imwrite(os.path.join('assets', map_name + '_point' + num_cloud, str(num_base).zfill(4) + '.png'), cv2.cvtColor(rgb_base[num_base], cv2.COLOR_RGB2BGR)) 
-    else: print('Dataset already exctracted..... ')
+    else: print('Dataset already exctracted, skipped extraction process. Use flag --force to overwrite dataset')
 
 
 if __name__ == '__main__':

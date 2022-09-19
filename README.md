@@ -21,9 +21,8 @@ The dataset is split into two parts: the validation HPointLoc-Val, which contain
   <img src="https://user-images.githubusercontent.com/68793107/130805029-d76ce041-10a4-47c4-91dd-52a50908ff39.png" />
 </p>
 
-**HPointLoc** dataset is available by the link:
-https://drive.google.com/drive/folders/1Tic7SuIAASSBpxa5j4Zq_0VaF9rdDav2
-
+**HPointLoc Val** dataset is available by the link:
+https://drive.google.com/drive/folders/14_UBWF4CgLiwdmbj0GFFWzgHPITjCcNx?usp=sharing
 
 ## Experimental results
 
@@ -47,13 +46,14 @@ The experiments were held on the **HPointLoc-Val** and **HPointLoc-ALL** dataset
 ## Quick start to evaluate PNTR pipeline
 
 ```bash
-git clone --recurse-submodules https://github.com/cds-mipt/HPointLoc
+git clone --recurse-submodules https://github.com/cds-mipt/HPointLoc.git
+```
+```bash
+Download models from https://drive.google.com/drive/folders/192c_XEn12Pz0pmD3aEwV8t3QBqwlBPo1?usp=sharing to PNTR folder
+cd HPointLoc
 conda env create -f environment.yml
 conda activate PTNR_pipeline 
-cd /path/to/dataset
-bash /path/to/HPointLoc_repo/download_HPointloc.sh
 python /path/to/HPointLoc_repo/pipelines/utils/exctracting_dataset.py --dataset_path /path/to/dataset/HPointLoc_dataset
-cd /path/to/HPointLoc_repo
 python pipelines/pipeline_evaluate.py --dataset_root /path/to/extracted_dataset --image-retrieval patchnetvlad --keypoints-matching superpoint_superglue --optimizer-cloud teaser
 ```
 

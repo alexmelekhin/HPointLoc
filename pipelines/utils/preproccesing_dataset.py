@@ -34,6 +34,6 @@ def preprocces_metadata(root_path):
                         qcount += 1
                         qfile.write(os.path.join(filename) +'\n')
 
-        print(f'Was loaded {qcount} query and {dbcount} database images')
+        print(f'Loaded {qcount} query and {dbcount} database images')
 
     return query_image_path, db_image_path

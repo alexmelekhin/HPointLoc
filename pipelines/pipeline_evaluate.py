@@ -21,14 +21,14 @@ def image_retrieval_stage(method, dataset_root, query_path, db_path,
     @:param topk: top-k ranked images from db
     """
 
-    exct_stage = {'apgem': 'PATH.py', 'patchnetvlad':'3rd/Patch-NetVLAD/feature_extract.py', 
+    exct_stage = {'apgem': 'PATH.py', 'patchnetvlad':'PNTR/Patch-NetVLAD/feature_extract.py', 
                                         'netvlad':'PATH.py', 'hfnet':'PATH.py'}
-    matching_stage = {'patchnetvlad':'3rd/Patch-NetVLAD/feature_match.py',}
+    matching_stage = {'patchnetvlad':'PNTR/Patch-NetVLAD/feature_match.py',}
     command = exct_stage[method]
 
     if method == 'patchnetvlad':
         option = input('choose config: speed/performance \n')
-        configfile = '3rd/Patch-NetVLAD/patchnetvlad/configs/{}.ini'.format(option)
+        configfile = 'PNTR/Patch-NetVLAD/patchnetvlad/configs/{}.ini'.format(option)
         assert os.path.isfile(configfile)
         config = configparser.ConfigParser()
         config.read(configfile)
@@ -88,19 +88,19 @@ def keypoints_matching_stage(method, dataset_root, input_pairs,
     @:param topk: top-k ranked images from db
     """
     if method == 'superpoint_superglue':
-        command = '3rd/SuperGluePretrainedNetwork/match_pairs.py'
-        if not exists('./3rd/SuperGluePretrainedNetwork/dump_match_pairs') or force:    
+        command = 'PNTR/SuperGluePretrainedNetwork/match_pairs.py'
+        if not exists('./PNTR/SuperGluePretrainedNetwork/dump_match_pairs') or force:    
             compute_image_pairs_args = ['--input_pairs', input_pairs,
                                         '--input_dir', dataset_root,  
                                         '--resize', '-1', 
-                                        '--output_dir', './3rd/SuperGluePretrainedNetwork/dump_match_pairs']
+                                        '--output_dir', './PNTR/SuperGluePretrainedNetwork/dump_match_pairs']
             run_python_command(command, compute_image_pairs_args, None)
         else:
             print('local feature matching already computed:......')
 
         if not exists(output_dir) or force:   
             print('>>>> converting keypoints to json format file')  
-            conv_to_json(dataset_root, './3rd/SuperGluePretrainedNetwork/dump_match_pairs', output_dir) 
+            conv_to_json(dataset_root, './PNTR/SuperGluePretrainedNetwork/dump_match_pairs', output_dir) 
     elif method == 'loftr':
         loftr(dataset_root, input_pairs, output_dir, root_dir)
     else:
@@ -115,9 +115,9 @@ def pose_optimization(dataset_root, image_retrieval, kpt_matching,
     @:param pose_optimization: name of point cloud optimization method
     """
     if pose_optimization == 'teaser':
-        if not exists('./3rd/TEASER-plusplus/') or force:
-            shutil.rmtree('./3rd/TEASER-plusplus/', ignore_errors=True)
-            completed = subprocess.run(['bash', './3rd/teaser.sh'])
+        if not exists('./PNTR/TEASER-plusplus/') or force:
+            shutil.rmtree('./PNTR/TEASER-plusplus/', ignore_errors=True)
+            completed = subprocess.run(['bash', './PNTR/teaser.sh'])
         from optimizers.teaser import teaser
         print('>>>> TEASER++ Point cloud registration')
         teaser(dataset_root, image_retrieval, kpt_matching, output_dir)
