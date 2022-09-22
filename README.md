@@ -26,8 +26,8 @@ The dataset is split into two parts: the validation HPointLoc-Val, which contain
 
 **HPointLoc** dataset is available by the following links:
 
-- Whole dataset: [disk.yandex](https://disk.yandex.ru/d/UJqZKojwOtGvTQ)
-- "Val" subsection only: [disk.yandex](https://disk.yandex.ru/d/FN-D-krupeETHg)
+- Whole dataset (HPointLoc-All): [disk.yandex](https://disk.yandex.ru/d/UJqZKojwOtGvTQ)
+- Val subsection only (HPointLoc-Val): [disk.yandex](https://disk.yandex.ru/d/FN-D-krupeETHg)
 
 ## Experimental results
 
