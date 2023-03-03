@@ -24,10 +24,10 @@ The dataset is split into two parts: the validation HPointLoc-Val, which contain
 
 ### Download links
 
-**HPointLoc** dataset is available by the following links:
+**HPointLoc** dataset is available by the following links (updated on March 3, 2023):
 
-- Whole dataset (HPointLoc-All): [disk.yandex](https://disk.yandex.ru/d/UJqZKojwOtGvTQ)
-- Val subsection only (HPointLoc-Val): [disk.yandex](https://disk.yandex.ru/d/FN-D-krupeETHg)
+- Whole dataset (HPointLoc-All): [disk.yandex](https://disk.yandex.com/d/7uz-vwjHr-cRhA)
+- Val subsection only (HPointLoc-Val): [disk.yandex](https://disk.yandex.com/d/aXtdaRW-QRCP-A)
 
 ## Experimental results
 
