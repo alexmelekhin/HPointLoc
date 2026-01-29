@@ -1,6 +1,22 @@
 # HPointLoc: open dataset and framework for indoor visual localization based on synthetic RGB-D images
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
+## ⚠️ Archived (read-only)
+
+This repository is archived and **not maintained**.
+
+It was published on this personal account for historical reasons to accompany the paper; I am not a co-author of the publication.
+
+**HPointLoc: Point-based Indoor Place Recognition using Synthetic RGB-D Images**  
+- arXiv: https://arxiv.org/abs/2212.14649  
+- Publisher page: https://link.springer.com/chapter/10.1007/978-3-031-30111-7_40
+
+There is no active maintainer contact for this codebase.
+Issues and pull requests are not monitored.  
+If you need changes or fixes, please fork the repository.
+
+## Description
+
 This repository provides a novel framework PNTR for exploring the capabilities of a new indoor dataset - **HPointLoc**, specially designed to explore detection and loop closure capabilities in Simultaneous Localization and Mapping (SLAM).
 
 **HPointLoc** is based on the popular Habitat simulator from 49 photorealistic indoor scenes from the Matterport3D dataset and contains 76,000 frames.
